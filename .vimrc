@@ -87,8 +87,8 @@ nnoremap H I
 " Jump to start and end of line using the home row keys
 map J ^
 map L $
-nnoremap I 5k
-nnoremap K 5j
+map I 5i
+map K 5k
  
 inoremap hh <Esc>
 
@@ -134,6 +134,15 @@ Plug 'justinmk/vim-sneak'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+ inoremap <silent><expr> <TAB>
+       \ pumvisible() ? "\<C-n>" :
+       \ <SID>check_back_space() ? "\<TAB>" :
+       \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible()) ? "\<C-p>" : "\<C-h>")
+
 " select text of current line (not whole line)
 nnoremap vv ^v$h
 
@@ -145,3 +154,8 @@ imap (<CR> (<CR>)<Esc>O
 imap [<CR> [<CR>]<Esc>O
 imap {<CR> {<CR>}<Esc>O
 imap <Leader><CR> <CR><Esc>O
+
+" set :Prettier to format
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
+
+set nowrap
