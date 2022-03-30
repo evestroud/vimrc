@@ -1,3 +1,6 @@
+" Started with "Missing Semester of Your CS Education" vimrc, then 
+" modified it heavily. Needs to be organized and cleaned.
+
 " Comments in Vimscript start with a `"`.
 
 " If you open this file in Vim, it'll be syntax highlighted for you.
@@ -63,22 +66,7 @@ set noerrorbells visualbell t_vb=
 " sometimes be convenient.
 set mouse+=a
 
-" Try to prevent bad habits like using the arrow keys for movement. This is
-" not the only possible bad habit. For example, holding down the h/j/k/l keys
-" for movement, rather than using more efficient movement commands, is also a
-" bad habit. The former is enforceable through a .vimrc, while we don't know
-" how to prevent the latter.
-" Do this in normal mode...
-" nnoremap <Left>  :echoe "Use h"<CR>
-" nnoremap <Right> :echoe "Use l"<CR>
-" nnoremap <Up>    :echoe "Use k"<CR>
-" nnoremap <Down>  :echoe "Use j"<CR>
-" " ...and in insert mode
-" inoremap <Left>  <ESC>:echoe "Use h"<CR>
-" inoremap <Right> <ESC>:echoe "Use l"<CR>
-" inoremap <Up>    <ESC>:echoe "Use k"<CR>
-" inoremap <Down>  <ESC>:echoe "Use j"<CR>
-
+" IJKL bindings
 nnoremap h i
 nnoremap j h
 nnoremap k j
@@ -90,13 +78,17 @@ map L $
 map I 5i
 map K 5k
  
-inoremap hh <Esc>
+" Exit insert mode. Was hh but too many words end in h
+inoremap jj <Esc>
+inoremap JJ <Esc>
 
+" visual mode ijkl and escape
 vnoremap h i
 vnoremap j h
 vnoremap k j
 vnoremap i k
-vnoremap hh <Esc>
+inoremap jj <Esc>
+inoremap JJ <Esc>
 
 " (Shift)Tab (de)indents code
 vnoremap <Tab> >
@@ -105,13 +97,15 @@ vnoremap <S-Tab> <
 filetype plugin indent on
 set autoindent
 
-nnoremap <C-n> :set rnu!<CR> " Toggle relative line numbers
+" Toggle relative line numbers
+nnoremap <C-n> :set rnu!<CR> 
 colorscheme slate
 
 " Keep cursor in approximately the middle of the screen
 set scrolloff=12        
 
-set undofile " Maintain undo history between sessions
+" Maintain undo history between sessions
+set undofile 
 set undodir=~/.vim/undodir
 
 " HTML indent
@@ -124,29 +118,21 @@ autocmd BufRead,BufNewFile *.htm,*.html,*.css setlocal tabstop=2 shiftwidth=2 ex
 set colorcolumn=80
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 
-" vim-plug
+" vim-plug - requires installing vim-plug manually first
 call plug#begin()
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 Plug 'justinmk/vim-sneak'
+Plug 'mattn/emmet-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
- inoremap <silent><expr> <TAB>
-       \ pumvisible() ? "\<C-n>" :
-       \ <SID>check_back_space() ? "\<TAB>" :
-       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible()) ? "\<C-p>" : "\<C-h>")
 
 " select text of current line (not whole line)
 nnoremap vv ^v$h
 
-" simple bracket closing
+" simple bracket closing - need to find a plugin for this
 imap ( ()<C-o>h
 imap [ []<C-o>h
 imap { {}<C-o>h
@@ -155,7 +141,11 @@ imap [<CR> [<CR>]<Esc>O
 imap {<CR> {<CR>}<Esc>O
 imap <Leader><CR> <CR><Esc>O
 
-" set :Prettier to format
+" set :Prettier to format - requires CoC and coc-Prettier
 command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 
+" should probably make a binding to toggle this
 set nowrap
+
+" requires emmet-vim
+let g:user_emmet_leader_key=','
