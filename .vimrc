@@ -94,6 +94,9 @@ inoremap JJ <Esc>
 vnoremap <Tab> >
 vnoremap <S-Tab> <
 
+nmap oo o<Esc>i$
+nmap OO O<Esc>k$
+
 filetype plugin indent on
 set autoindent
 
@@ -133,13 +136,13 @@ call plug#end()
 nnoremap vv ^v$h
 
 " simple bracket closing - need to find a plugin for this
-imap ( ()<C-o>h
-imap [ []<C-o>h
-imap { {}<C-o>h
-imap (<CR> (<CR>)<Esc>O
-imap [<CR> [<CR>]<Esc>O
-imap {<CR> {<CR>}<Esc>O
-imap <Leader><CR> <CR><Esc>O
+" imap ( ()<C-o>h
+" imap [ []<C-o>h
+" imap { {}<C-o>h
+" imap (<CR> (<CR>)<Esc>O
+" imap [<CR> [<CR>]<Esc>O
+" imap {<CR> {<CR>}<Esc>O
+" imap <Leader><CR> <CR><Esc>O
 
 " set :Prettier to format - requires CoC and coc-Prettier
 command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
@@ -149,3 +152,7 @@ set nowrap
 
 " requires emmet-vim
 let g:user_emmet_leader_key=','
+
+" switch to line cursor for insert mode
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
