@@ -94,8 +94,8 @@ vnoremap JJ <Esc>
 vnoremap <Tab> >
 vnoremap <S-Tab> <
 
-nmap oo o<Esc>i$
-nmap OO O<Esc>k$
+nmap <leader>o o<Esc>i$
+nmap <leader>O O<Esc>k$
 
 filetype plugin indent on
 set autoindent
@@ -142,7 +142,10 @@ nnoremap vv ^v$h
 " imap (<CR> (<CR>)<Esc>O
 " imap [<CR> [<CR>]<Esc>O
 " imap {<CR> {<CR>}<Esc>O
-" imap <Leader><CR> <CR><Esc>O
+
+" insert two lines, move cursor to line between with correct indent
+" intended for opening blocks e.g. HTML blocks and CSS selectors
+imap <Leader><CR> <CR><Esc>O
 
 " set :Prettier to format - requires CoC and coc-Prettier
 command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
