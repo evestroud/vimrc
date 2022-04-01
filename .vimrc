@@ -87,8 +87,8 @@ vnoremap h i
 vnoremap j h
 vnoremap k j
 vnoremap i k
-inoremap jj <Esc>
-inoremap JJ <Esc>
+vnoremap jj <Esc>
+vnoremap JJ <Esc>
 
 " (Shift)Tab (de)indents code
 vnoremap <Tab> >
