@@ -159,3 +159,6 @@ let g:user_emmet_leader_key=','
 " switch to line cursor for insert mode
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
+
+" yank to clipboard. Requires xclip
+vnoremap <silent><Leader>y "yy <Bar> :call system('xclip', @y)<CR>
