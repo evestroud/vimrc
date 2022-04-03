@@ -101,7 +101,7 @@ filetype plugin indent on
 set autoindent
 
 " Toggle relative line numbers
-nnoremap <C-n> :set rnu!<CR> 
+nnoremap <leader>n :set rnu!<CR> 
 colorscheme slate
 
 " Keep cursor in approximately the middle of the screen
@@ -150,8 +150,8 @@ imap <Leader><CR> <CR><Esc>O
 " set :Prettier to format - requires CoC and coc-Prettier
 command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 
-" should probably make a binding to toggle this
-set nowrap
+" Toggle wrap
+nmap <leader>w :set wrap!<CR>
 
 " requires emmet-vim
 let g:user_emmet_leader_key=','
@@ -162,3 +162,5 @@ let &t_EI = "\e[2 q"
 
 " yank to clipboard. Requires xclip
 vnoremap <silent><Leader>y "yy <Bar> :call system('xclip', @y)<CR>
+
+set termguicolors
