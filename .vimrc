@@ -87,6 +87,7 @@ vnoremap h i
 vnoremap j h
 vnoremap k j
 vnoremap i k
+vnoremap H I
 vnoremap jj <Esc>
 vnoremap JJ <Esc>
 
@@ -130,6 +131,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'justinmk/vim-sneak'
 Plug 'mattn/emmet-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'sheerun/vim-polyglot'
 call plug#end()
 
 " select text of current line (not whole line)
