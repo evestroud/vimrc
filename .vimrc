@@ -77,6 +77,9 @@ map J ^
 map L $
 map I 5i
 map K 5k
+
+" Add Join binding back in. Lowercase so it's easier to use
+nmap <leader>j :join<CR>
  
 " Exit insert mode. Was hh but too many words end in h
 inoremap jj <Esc>
