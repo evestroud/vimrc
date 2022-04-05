@@ -1,6 +1,8 @@
 " Started with "Missing Semester of Your CS Education" vimrc, then 
 " modified it heavily. Needs to be organized and cleaned.
 
+" TODO organize file
+
 " Comments in Vimscript start with a `"`.
 
 " If you open this file in Vim, it'll be syntax highlighted for you.
@@ -78,7 +80,7 @@ map L $
 map I 5i
 map K 5k
 
-" Add Join binding back in. Lowercase so it's easier to use
+" Add join binding back in. Lowercase so it's easier to use
 nmap <leader>j :join<CR>
  
 " Exit insert mode. Was hh but too many words end in h
@@ -94,10 +96,11 @@ vnoremap H I
 vnoremap jj <Esc>
 vnoremap JJ <Esc>
 
-" (Shift)Tab (de)indents code
-vnoremap <Tab> >
-vnoremap <S-Tab> <
+" (Shift)Tab (de)indents code - doesn't do what I thought it did
+" vnoremap <Tab> >
+" vnoremap <S-Tab> <
 
+" TODO can this be set to put cursor back where it was?
 nmap <leader>o o<Esc>i$
 nmap <leader>O O<Esc>k$
 
@@ -109,9 +112,10 @@ nnoremap <leader>n :set rnu!<CR>
 colorscheme slate
 
 " Keep cursor in approximately the middle of the screen
-set scrolloff=12        
+set scrolloff=10
 
 " Maintain undo history between sessions
+" TODO seperate undo for vim and nvim
 set undofile 
 set undodir=~/.vim/undodir
 
@@ -141,15 +145,21 @@ call plug#end()
 nnoremap vv ^v$h
 
 " simple bracket closing - need to find a plugin for this
-" imap ( ()<C-o>h
-" imap [ []<C-o>h
-" imap { {}<C-o>h
-" imap (<CR> (<CR>)<Esc>O
-" imap [<CR> [<CR>]<Esc>O
-" imap {<CR> {<CR>}<Esc>O
+" " These don't work
+" imap <leader>( (<space><space>)<C-o>2h
+" imap <leader>[ [<space><space>]<C-o>2h
+" imap <leader>{ {<space><space>}<C-o>2h
+" " These don't work well
+imap <leader>( ()<C-o>h
+imap <leader>[ []<C-o>h
+imap <leader>{ {}<C-o>h
+" These work ok
+imap (<CR> (<CR>)<Esc>O
+imap [<CR> [<CR>]<Esc>O
+imap {<CR> {<CR>}<Esc>O
 
 " insert two lines, move cursor to line between with correct indent
-" intended for opening blocks e.g. HTML blocks and CSS selectors
+" intended for opening blocks e.g. HTML blocks
 imap <Leader><CR> <CR><Esc>O
 
 " set :Prettier to format - requires CoC and coc-Prettier
@@ -161,7 +171,7 @@ nmap <leader>w :set wrap!<CR>
 " requires emmet-vim
 let g:user_emmet_leader_key=','
 
-" switch to line cursor for insert mode
+" switch to line cursor for insert mode - for vim
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
