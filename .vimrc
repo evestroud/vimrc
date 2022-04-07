@@ -138,6 +138,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'mattn/emmet-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
+Plug 'lfilho/cosco.vim'
 call plug#end()
 
 " select text of current line (not whole line)
@@ -170,3 +171,5 @@ highlight CocErrorFloat ctermfg=White guifg=#ffffff
 imap <expr> <CR> pumvisible()
 		 \ ? "\<C-Y>"
 		 \ : "<Plug>delimitMateCR"
+
+nmap <leader>; <Plug>(cosco-commaOrSemiColon)
