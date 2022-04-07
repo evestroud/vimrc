@@ -3,10 +3,6 @@
 
 " TODO organize file
 
-" Comments in Vimscript start with a `"`.
-
-" If you open this file in Vim, it'll be syntax highlighted for you.
-
 " Vim is based on Vi. Setting `nocompatible` switches from the default
 " Vi-compatibility mode and enables useful Vim functionality. This
 " configuration option turns out not to be necessary for the file named
@@ -82,6 +78,9 @@ map K 5k
 
 " Add join binding back in. Lowercase so it's easier to use
 nmap <leader>j :join<CR>
+
+" Clear highlight
+nmap <leader>h :noh<CR>
  
 " Exit insert mode. Was hh but too many words end in h
 inoremap jj <Esc>
@@ -115,15 +114,13 @@ colorscheme slate
 set scrolloff=10
 
 " Maintain undo history between sessions
-" TODO seperate undo for vim and nvim
 set undofile 
-set undodir=~/.vim/undodir
+if !has("nvim")
+	set undodir=~/.vim/undodir
+endif
 
 " HTML indent
 autocmd BufRead,BufNewFile *.htm,*.html,*.css setlocal tabstop=2 shiftwidth=2 expandtab
-" HTML autocomplete - absolete with CoC
-" imap ,/ </<C-X><C-O><Esc>F<h
-" imap ,/<CR> <CR></<C-X><C-O><Esc><<O
 
 " set line length indicator
 set colorcolumn=80
@@ -146,20 +143,6 @@ call plug#end()
 " select text of current line (not whole line)
 nnoremap vv ^v$h
 
-" simple bracket closing - need to find a plugin for this
-" " These don't work
-" imap <leader>( (<space><space>)<C-o>2h
-" imap <leader>[ [<space><space>]<C-o>2h
-" imap <leader>{ {<space><space>}<C-o>2h
-" " These don't work well
-" imap <leader>( ()<C-o>h
-" imap <leader>[ []<C-o>h
-" imap <leader>{ {}<C-o>h
-" " These work ok
-" imap (<CR> (<CR>)<Esc>O
-" imap [<CR> [<CR>]<Esc>O
-" imap {<CR> {<CR>}<Esc>O
-
 " insert two lines, move cursor to line between with correct indent
 " intended for opening blocks e.g. HTML blocks
 imap <Leader><CR> <CR><Esc>O
@@ -181,3 +164,9 @@ let &t_EI = "\e[2 q"
 vnoremap <silent><Leader>y "yy <Bar> :call system('xclip', @y)<CR>
 
 set termguicolors
+
+highlight CocErrorFloat ctermfg=White guifg=#ffffff
+
+imap <expr> <CR> pumvisible()
+		 \ ? "\<C-Y>"
+		 \ : "<Plug>delimitMateCR"
