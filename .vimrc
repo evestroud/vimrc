@@ -133,8 +133,10 @@ highlight ColorColumn ctermbg=0 guibg=lightgrey
 call plug#begin()
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'suy/vim-context-commentstring'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
+Plug 'Raimondi/delimitMate'
 Plug 'justinmk/vim-sneak'
 Plug 'mattn/emmet-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -150,13 +152,13 @@ nnoremap vv ^v$h
 " imap <leader>[ [<space><space>]<C-o>2h
 " imap <leader>{ {<space><space>}<C-o>2h
 " " These don't work well
-imap <leader>( ()<C-o>h
-imap <leader>[ []<C-o>h
-imap <leader>{ {}<C-o>h
-" These work ok
-imap (<CR> (<CR>)<Esc>O
-imap [<CR> [<CR>]<Esc>O
-imap {<CR> {<CR>}<Esc>O
+" imap <leader>( ()<C-o>h
+" imap <leader>[ []<C-o>h
+" imap <leader>{ {}<C-o>h
+" " These work ok
+" imap (<CR> (<CR>)<Esc>O
+" imap [<CR> [<CR>]<Esc>O
+" imap {<CR> {<CR>}<Esc>O
 
 " insert two lines, move cursor to line between with correct indent
 " intended for opening blocks e.g. HTML blocks
