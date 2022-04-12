@@ -65,16 +65,16 @@ set noerrorbells visualbell t_vb=
 set mouse+=a
 
 " IJKL bindings
-nnoremap h i
-nnoremap j h
-nnoremap k j
-nnoremap i k
-nnoremap H I
-" Jump to start and end of line using the home row keys
-map J ^
-map L $
-map I 5i
-map K 5k
+" nnoremap h i
+" nnoremap j h
+" nnoremap k j
+" nnoremap i k
+" nnoremap H I
+" " Jump to start and end of line using the home row keys
+" map J ^
+" map L $
+" map I 5i
+" map K 5k
 
 " Add join binding back in. Lowercase so it's easier to use
 nmap <leader>j :join<CR>
@@ -87,13 +87,13 @@ inoremap jj <Esc>
 inoremap JJ <Esc>
 
 " visual mode ijkl and escape
-vnoremap h i
-vnoremap j h
-vnoremap k j
-vnoremap i k
-vnoremap H I
-vnoremap jj <Esc>
-vnoremap JJ <Esc>
+" vnoremap h i
+" vnoremap j h
+" vnoremap k j
+" vnoremap i k
+" vnoremap H I
+" vnoremap jj <Esc>
+" vnoremap JJ <Esc>
 
 " (Shift)Tab (de)indents code - doesn't do what I thought it did
 " vnoremap <Tab> >
