@@ -1,0 +1,150 @@
+set nocompatible            " disable compatibility to old-time vi
+
+set hlsearch                " highlight search 
+set incsearch               " incremental search
+set ignorecase              " case insensitive 
+set smartcase             " using capitals in search changes to case sensitive
+
+set showmatch               " show matching brackets
+
+set mouse+=v                 " middle-click paste with 
+set mouse+=a                 " enable mouse click
+
+set tabstop=4               " number of columns occupied by a tab 
+set softtabstop=4           " see multiple spaces as tabstops so <BS> does the right thing
+set expandtab               " converts tabs to white space
+set shiftwidth=4            " width for autoindents
+set autoindent              " indent a new line the same amount as the line just typed
+
+set number                  " add line numbers
+set relativenumber      " relative line numbers
+
+set cc=80                  " set an 80 column border for good coding style
+set scrolloff=5      " keep cursor in a reasonable part of the screen
+set undofile
+
+filetype plugin on
+filetype plugin indent on   "allow auto-indenting depending on file type
+" syntax on                   " syntax highlighting
+
+""" PLUGINS
+call plug#begin()
+" motion
+Plug 'ggandor/lightspeed.nvim'
+" language support
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  " fix indents for html/css/js
+Plug 'sheerun/vim-polyglot'
+  " comment css and js inside html
+Plug 'suy/vim-context-commentstring'
+  " emmet support with emmet-vim
+Plug 'mattn/emmet-vim'
+" editing
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'windwp/nvim-autopairs'
+Plug 'windwp/nvim-ts-autotag'
+" misc
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+" colorschemes
+Plug 'rose-pine/neovim'
+call plug#end()
+
+let g:coq_settings = { 'auto_start': 'shut-up' }
+
+" lua plugin settings
+" tried to move this to a seperate file but it didn't work
+lua << EOF
+
+require'nvim-treesitter.configs'.setup {
+    -- A list of parser names, or "all"
+    ensure_installed = { "html", "css", "javascript", "vim", "json", "python"},
+
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+
+    -- List of parsers to ignore installing (for "all")
+    -- ignore_install = { "javascript" },
+
+    highlight = {
+        -- `false` will disable the whole extension
+        enable = true,
+
+        -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+        -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+        -- the name of the parser)
+
+        -- list of language that will be disabled
+        -- disable = { "c", "rust" },
+
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+    },
+}
+
+require('nvim-autopairs').setup{}
+
+local lspconfig = require'lspconfig'
+local configs = require'lspconfig/configs'    
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+EOF
+
+" have to put this after plugs to get colorscheme to work
+set termguicolors
+colorscheme rose-pine
+
+""" BINDINGS
+  " settings
+    " toggle relative line numbers
+nmap <leader>n :set rnu!<CR>
+    " clear highlight
+nmap <leader>h :noh<CR>
+    " toggle line wrap
+nmap <leader>w :set wrap!<CR>
+    " show registers
+map <leader>' :registers<CR>
+    " paste from clipboard, turning paste mode on and off appropriately
+nmap <leader>p :set paste<CR>"*p:set nopaste!<CR>
+
+  " commands
+inoremap jj <Esc>
+inoremap JJ <Esc>
+    " more intuitive motions
+map H ^
+map L $
+map K 5k
+map J 5j
+nnoremap <leader>j J
+vnoremap <leader>j J
+    " select text of current line (not whole line)
+nmap vv ^v$h
+    " line break + split
+imap <leader><CR> <CR><C-o>O
+" imap {<CR> {<CR>}<C-o>O
+" imap (<CR> (<CR>)<C-o>O
+" imap [<CR> [<CR>]<C-o>O
+    " move line or visually selected block - alt+j/k
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+    " move split panes to left/bottom/top/right
+nnoremap <A-h> <C-W>H
+nnoremap <A-j> <C-W>J
+nnoremap <A-k> <C-W>K
+nnoremap <A-l> <C-W>L
+    " move between panes to left/bottom/top/right
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
