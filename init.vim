@@ -25,7 +25,6 @@ set undofile
 
 filetype plugin on
 filetype plugin indent on   "allow auto-indenting depending on file type
-" syntax on                   " syntax highlighting
 
 """ PLUGINS
 call plug#begin()
@@ -53,6 +52,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 " colorschemes
 Plug 'rose-pine/neovim'
+Plug 'xiyaowong/nvim-transparent'
 call plug#end()
 
 let g:coq_settings = { 'auto_start': 'shut-up' }
@@ -61,6 +61,7 @@ let g:coq_settings = { 'auto_start': 'shut-up' }
 " tried to move this to a seperate file but it didn't work
 lua << EOF
 
+---- Tree-Sitter setup ----
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all"
     ensure_installed = { "html", "css", "javascript", "vim", "json", "python"},
@@ -90,12 +91,63 @@ require'nvim-treesitter.configs'.setup {
     },
 }
 
+---- setup autopairs ----
+local remap = vim.api.nvim_set_keymap
+local npairs = require('nvim-autopairs')
+
+npairs.setup({ map_bs = false, map_cr = false })
+
+vim.g.coq_settings = { keymap = { recommended = false } }
+
+-- these mappings are coq recommended mappings unrelated to nvim-autopairs
+remap('i', '<esc>', [[pumvisible() ? "<c-e><esc>" : "<esc>"]], { expr = true, noremap = true })
+remap('i', '<c-c>', [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]], { expr = true, noremap = true })
+remap('i', '<tab>', [[pumvisible() ? "<c-n>" : "<tab>"]], { expr = true, noremap = true })
+remap('i', '<s-tab>', [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, noremap = true })
+
+-- skip it, if you use another global object
+_G.MUtils= {}
+
+MUtils.CR = function()
+  if vim.fn.pumvisible() ~= 0 then
+    if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
+      return npairs.esc('<c-y>')
+    else
+      return npairs.esc('<c-e>') .. npairs.autopairs_cr()
+    end
+  else
+    return npairs.autopairs_cr()
+  end
+end
+remap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
+
+MUtils.BS = function()
+  if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info({ 'mode' }).mode == 'eval' then
+    return npairs.esc('<c-e>') .. npairs.autopairs_bs()
+  else
+    return npairs.autopairs_bs()
+  end
+end
+remap('i', '<bs>', 'v:lua.MUtils.BS()', { expr = true, noremap = true })
+
+----------------------
+
 require('nvim-autopairs').setup{}
 
-local lspconfig = require'lspconfig'
-local configs = require'lspconfig/configs'    
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
+require('rose-pine').setup({
+    dark_variant = 'moon',
+    highlight_groups = {
+		ColorColumn = { bg = 'rose' }
+	}
+    })
+
+require("transparent").setup({ enable = true })
+
+---- think this was leftover from a broken plugin and not necessary
+-- local lspconfig = require'lspconfig'
+-- local configs = require'lspconfig/configs'    
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 EOF
 
@@ -111,12 +163,16 @@ nmap <leader>n :set rnu!<CR>
 nmap <leader>h :noh<CR>
     " toggle line wrap
 nmap <leader>w :set wrap!<CR>
+
+  " general commands
     " show registers
 map <leader>' :registers<CR>
     " paste from clipboard, turning paste mode on and off appropriately
 nmap <leader>p :set paste<CR>"*p:set nopaste!<CR>
+    " open index.html in firefox
+nmap <leader>` :!firefox index.html<CR>
 
-  " commands
+  " editing commands
 inoremap jj <Esc>
 inoremap JJ <Esc>
     " more intuitive motions
