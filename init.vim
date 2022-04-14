@@ -57,6 +57,8 @@ call plug#end()
 
 let g:coq_settings = { 'auto_start': 'shut-up' }
 
+let g:user_emmet_leader_key='<C-,>'
+
 " lua plugin settings
 " tried to move this to a seperate file but it didn't work
 lua << EOF
@@ -136,9 +138,6 @@ require('nvim-autopairs').setup{}
 
 require('rose-pine').setup({
     dark_variant = 'moon',
-    highlight_groups = {
-		ColorColumn = { bg = 'rose' }
-	}
     })
 
 require("transparent").setup({ enable = true })
@@ -169,6 +168,8 @@ nmap <leader>w :set wrap!<CR>
 map <leader>' :registers<CR>
     " paste from clipboard, turning paste mode on and off appropriately
 nmap <leader>p :set paste<CR>"*p:set nopaste!<CR>
+imap <leader>p <Esc>:set paste<CR>"*p:set nopaste!<CR>
+
     " open index.html in firefox
 nmap <leader>` :!firefox index.html<CR>
 
