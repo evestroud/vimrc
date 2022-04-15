@@ -30,23 +30,27 @@ filetype plugin indent on   "allow auto-indenting depending on file type
 call plug#begin()
 " motion
 Plug 'ggandor/lightspeed.nvim'
+
 " language support
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
   " fix indents for html/css/js
 Plug 'sheerun/vim-polyglot'
   " comment css and js inside html
 Plug 'suy/vim-context-commentstring'
   " emmet support with emmet-vim
 Plug 'mattn/emmet-vim'
+
 " editing
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'windwp/nvim-autopairs'
 Plug 'windwp/nvim-ts-autotag'
+
 " misc
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
@@ -57,7 +61,7 @@ call plug#end()
 
 let g:coq_settings = { 'auto_start': 'shut-up' }
 
-let g:user_emmet_leader_key='<C-,>'
+let g:user_emmet_leader_key=','
 
 " lua plugin settings
 " tried to move this to a seperate file but it didn't work
@@ -93,44 +97,63 @@ require'nvim-treesitter.configs'.setup {
     },
 }
 
----- setup autopairs ----
-local remap = vim.api.nvim_set_keymap
-local npairs = require('nvim-autopairs')
+---- LSP setup ----
+local lsp_installer = require("nvim-lsp-installer")
 
-npairs.setup({ map_bs = false, map_cr = false })
+-- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
+-- or if the server is already installed).
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
 
-vim.g.coq_settings = { keymap = { recommended = false } }
+    -- (optional) Customize the options passed to the server
+    -- if server.name == "tsserver" then
+    --     opts.root_dir = function() ... end
+    -- end
 
--- these mappings are coq recommended mappings unrelated to nvim-autopairs
-remap('i', '<esc>', [[pumvisible() ? "<c-e><esc>" : "<esc>"]], { expr = true, noremap = true })
-remap('i', '<c-c>', [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]], { expr = true, noremap = true })
-remap('i', '<tab>', [[pumvisible() ? "<c-n>" : "<tab>"]], { expr = true, noremap = true })
-remap('i', '<s-tab>', [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, noremap = true })
+    -- This setup() function will take the provided server configuration and decorate it with the necessary properties
+    -- before passing it onwards to lspconfig.
+    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    server:setup(opts)
+end)
 
--- skip it, if you use another global object
-_G.MUtils= {}
-
-MUtils.CR = function()
-  if vim.fn.pumvisible() ~= 0 then
-    if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
-      return npairs.esc('<c-y>')
-    else
-      return npairs.esc('<c-e>') .. npairs.autopairs_cr()
-    end
-  else
-    return npairs.autopairs_cr()
-  end
-end
-remap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
-
-MUtils.BS = function()
-  if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info({ 'mode' }).mode == 'eval' then
-    return npairs.esc('<c-e>') .. npairs.autopairs_bs()
-  else
-    return npairs.autopairs_bs()
-  end
-end
-remap('i', '<bs>', 'v:lua.MUtils.BS()', { expr = true, noremap = true })
+---- setup autopairs ---- BREAKS COQ
+-- local remap = vim.api.nvim_set_keymap
+-- local npairs = require('nvim-autopairs')
+-- 
+-- npairs.setup({ map_bs = false, map_cr = false })
+-- 
+-- vim.g.coq_settings = { keymap = { recommended = false } }
+-- 
+-- -- these mappings are coq recommended mappings unrelated to nvim-autopairs
+-- remap('i', '<esc>', [[pumvisible() ? "<c-e><esc>" : "<esc>"]], { expr = true, noremap = true })
+-- remap('i', '<c-c>', [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]], { expr = true, noremap = true })
+-- remap('i', '<tab>', [[pumvisible() ? "<c-n>" : "<tab>"]], { expr = true, noremap = true })
+-- remap('i', '<s-tab>', [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, noremap = true })
+-- 
+-- -- skip it, if you use another global object
+-- _G.MUtils= {}
+-- 
+-- MUtils.CR = function()
+--   if vim.fn.pumvisible() ~= 0 then
+--     if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
+--       return npairs.esc('<c-y>')
+--     else
+--       return npairs.esc('<c-e>') .. npairs.autopairs_cr()
+--     end
+--   else
+--     return npairs.autopairs_cr()
+--   end
+-- end
+-- remap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
+-- 
+-- MUtils.BS = function()
+--   if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info({ 'mode' }).mode == 'eval' then
+--     return npairs.esc('<c-e>') .. npairs.autopairs_bs()
+--   else
+--     return npairs.autopairs_bs()
+--   end
+-- end
+-- remap('i', '<bs>', 'v:lua.MUtils.BS()', { expr = true, noremap = true })
 
 ----------------------
 
@@ -142,7 +165,7 @@ require('rose-pine').setup({
 
 require("transparent").setup({ enable = true })
 
----- think this was leftover from a broken plugin and not necessary
+---- for emmet-ls - can't get to work
 -- local lspconfig = require'lspconfig'
 -- local configs = require'lspconfig/configs'    
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -171,11 +194,21 @@ nmap <leader>p :set paste<CR>"*p:set nopaste!<CR>
 imap <leader>p <Esc>:set paste<CR>"*p:set nopaste!<CR>
 
     " open index.html in firefox
-nmap <leader>` :!firefox index.html<CR>
+function! OpenWebPage()
+  if filereadable("index.html")
+    exec "!firefox index.html"
+  else
+    exec "!firefox %"
+  endif
+endfunction
+
+nmap <leader>` :call OpenWebPage()<CR>
 
   " editing commands
-inoremap jj <Esc>
-inoremap JJ <Esc>
+inoremap kj <Esc>
+inoremap jk <Esc>
+inoremap KJ <Esc>
+inoremap JK <Esc>
     " more intuitive motions
 map H ^
 map L $
@@ -183,6 +216,7 @@ map K 5k
 map J 5j
 nnoremap <leader>j J
 vnoremap <leader>j J
+
     " select text of current line (not whole line)
 nmap vv ^v$h
     " line break + split
@@ -190,16 +224,19 @@ imap <leader><CR> <CR><C-o>O
 " imap {<CR> {<CR>}<C-o>O
 " imap (<CR> (<CR>)<C-o>O
 " imap [<CR> [<CR>]<C-o>O
+
     " move line or visually selected block - alt+j/k
 inoremap <A-j> <Esc>:m .+1<CR>==gi
 inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
+
     " move split panes to left/bottom/top/right
 nnoremap <A-h> <C-W>H
 nnoremap <A-j> <C-W>J
 nnoremap <A-k> <C-W>K
 nnoremap <A-l> <C-W>L
+
     " move between panes to left/bottom/top/right
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
