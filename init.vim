@@ -44,6 +44,8 @@ Plug 'sheerun/vim-polyglot'
 Plug 'suy/vim-context-commentstring'
   " emmet support with emmet-vim
 Plug 'mattn/emmet-vim'
+  " linting/formatting
+Plug 'dense-analysis/ale'
 
 " editing
 Plug 'tpope/vim-surround'
@@ -54,6 +56,7 @@ Plug 'windwp/nvim-ts-autotag'
 " misc
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
+Plug 'folke/which-key.nvim'
 " colorschemes
 Plug 'rose-pine/neovim'
 Plug 'xiyaowong/nvim-transparent'
@@ -62,6 +65,15 @@ call plug#end()
 let g:coq_settings = { 'auto_start': 'shut-up' }
 
 let g:user_emmet_leader_key=','
+
+
+let g:ale_fixers = {
+\   'javascript': ['prettier'],
+\   'css': ['prettier'],
+\   'html': ['prettier']
+\}
+let g:ale_linters_explicit = 1
+let g:ale_fix_on_save = 1
 
 " lua plugin settings
 " tried to move this to a seperate file but it didn't work
@@ -170,6 +182,7 @@ require("transparent").setup({ enable = true })
 -- local configs = require'lspconfig/configs'    
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+require("which-key").setup()
 
 EOF
 
@@ -221,9 +234,9 @@ vnoremap <leader>j J
 nmap vv ^v$h
     " line break + split
 imap <leader><CR> <CR><C-o>O
-" imap {<CR> {<CR>}<C-o>O
-" imap (<CR> (<CR>)<C-o>O
-" imap [<CR> [<CR>]<C-o>O
+imap <leader>{ {<CR><C-o>O
+imap <leader>( (<CR><C-o>O
+imap <leader>[ [<CR><C-o>O
 
     " move line or visually selected block - alt+j/k
 inoremap <A-j> <Esc>:m .+1<CR>==gi
