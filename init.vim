@@ -62,9 +62,10 @@ Plug 'rose-pine/neovim'
 Plug 'xiyaowong/nvim-transparent'
 call plug#end()
 
-let g:coq_settings = { 'auto_start': 'shut-up' }
+let g:coq_settings = { 'auto_start': 'shut-up', 
+      \ 'keymap.jump_to_mark': '<space><space>'}
 
-let g:user_emmet_leader_key=','
+let g:user_emmet_leader_key='<M-,>'
 
 
 let g:ale_fixers = {
@@ -126,62 +127,36 @@ lsp_installer.on_server_ready(function(server)
     -- before passing it onwards to lspconfig.
     -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
     server:setup(opts)
+
+    local function buf_set_keymap(...)
+        vim.api.nvim_buf_set_keymap(bufnr, ...)
+    end
+
+    buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', '<space>k', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    -- buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+    buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+    buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+    buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end)
 
----- setup autopairs ---- BREAKS COQ
--- local remap = vim.api.nvim_set_keymap
--- local npairs = require('nvim-autopairs')
--- 
--- npairs.setup({ map_bs = false, map_cr = false })
--- 
--- vim.g.coq_settings = { keymap = { recommended = false } }
--- 
--- -- these mappings are coq recommended mappings unrelated to nvim-autopairs
--- remap('i', '<esc>', [[pumvisible() ? "<c-e><esc>" : "<esc>"]], { expr = true, noremap = true })
--- remap('i', '<c-c>', [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]], { expr = true, noremap = true })
--- remap('i', '<tab>', [[pumvisible() ? "<c-n>" : "<tab>"]], { expr = true, noremap = true })
--- remap('i', '<s-tab>', [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, noremap = true })
--- 
--- -- skip it, if you use another global object
--- _G.MUtils= {}
--- 
--- MUtils.CR = function()
---   if vim.fn.pumvisible() ~= 0 then
---     if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
---       return npairs.esc('<c-y>')
---     else
---       return npairs.esc('<c-e>') .. npairs.autopairs_cr()
---     end
---   else
---     return npairs.autopairs_cr()
---   end
--- end
--- remap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
--- 
--- MUtils.BS = function()
---   if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info({ 'mode' }).mode == 'eval' then
---     return npairs.esc('<c-e>') .. npairs.autopairs_bs()
---   else
---     return npairs.autopairs_bs()
---   end
--- end
--- remap('i', '<bs>', 'v:lua.MUtils.BS()', { expr = true, noremap = true })
-
-----------------------
 
 require('nvim-autopairs').setup{}
-
 require('rose-pine').setup({
     dark_variant = 'moon',
     })
-
 require("transparent").setup({ enable = true })
-
----- for emmet-ls - can't get to work
--- local lspconfig = require'lspconfig'
--- local configs = require'lspconfig/configs'    
--- local capabilities = vim.lsp.protocol.make_client_capabilities()
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
 require("which-key").setup()
 
 EOF
