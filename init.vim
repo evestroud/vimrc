@@ -63,7 +63,7 @@ Plug 'xiyaowong/nvim-transparent'
 call plug#end()
 
 let g:coq_settings = { 'auto_start': 'shut-up', 
-      \ 'keymap.jump_to_mark': '<space><space>'}
+      \ 'keymap.jump_to_mark': '<C-n>'}
 
 let g:user_emmet_leader_key='<M-,>'
 
