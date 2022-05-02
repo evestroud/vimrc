@@ -152,7 +152,7 @@ lsp_installer.on_server_ready(function(server)
 end)
 
 
-require('nvim-autopairs').setup{}
+require('nvim-autopairs').setup{enable_check_bracket_line = false}
 require('rose-pine').setup({
     dark_variant = 'moon',
     })
