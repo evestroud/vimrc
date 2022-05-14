@@ -37,6 +37,7 @@ Plug 'williamboman/nvim-lsp-installer'
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'gpanders/nvim-parinfer'
 
   " fix indents for html/css/js
 Plug 'sheerun/vim-polyglot'
@@ -71,7 +72,8 @@ let g:user_emmet_leader_key='<M-,>'
 let g:ale_fixers = {
 \   'javascript': ['prettier'],
 \   'css': ['prettier'],
-\   'html': ['prettier']
+\   'html': ['prettier'],
+\   'python': ['black']
 \}
 let g:ale_linters_explicit = 1
 let g:ale_fix_on_save = 1
