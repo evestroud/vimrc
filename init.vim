@@ -17,7 +17,7 @@ set shiftwidth=4            " width for autoindents
 set autoindent              " indent a new line the same amount as the line just typed
 
 set number                  " add line numbers
-set relativenumber      " relative line numbers
+" set relativenumber      " relative line numbers
 
 set cc=80                  " set an 80 column border for good coding style
 set scrolloff=5      " keep cursor in a reasonable part of the screen
@@ -209,6 +209,12 @@ vnoremap <leader>j J
 
     " select text of current line (not whole line)
 nmap vv ^v$h
+
+    " finish line with colon, semicolon, or comma
+imap <leader>: <Esc>A:<Esc>o
+imap <leader>; <Esc>A;<Esc>o
+imap <leader>, <Esc>A,<Esc>o
+
     " line break + split
 imap <leader><CR> <CR><C-o>O
 imap <leader>{ {<CR><C-o>O
